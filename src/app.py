@@ -12,15 +12,13 @@ def ExtractData(file):
 
         for item in dict_reader:
             item = dict(item)        
-            if 'Card_Details' in item:
-                del item['Card_Details']
-            if 'Full_Name' in item:
-                del item['Full_Name']
-            else:
-                break
+            if 'Card_Details' in item: del item['Card_Details']
+            if 'Full_Name' in item: del item['Full_Name']
+            else: break
             fullDataFromCSV.append(item)
+
         return(fullDataFromCSV)    
 
-ExtractData(file)
+print(ExtractData(file))
         
 
