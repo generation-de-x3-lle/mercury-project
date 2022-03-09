@@ -8,8 +8,27 @@
 3. Remove and transform data
 4. Help identify trends and insights
 
-## Table : 1
-| -----------| -----------   | ------------- | -------------- | ------------ |
-| date_time  | location      | order         | amount         | payment_type |
-|            |               |               |                |              |
-|            |               |               |                |              |
+## Table : Basket
+| -----------| -----------    | 
+| product_ID | transaction_Id | 
+|  INT       |    INT         |       
+|            |                |             
+
+## Table : Branch
+| -----------| ----------- | 
+| cafe_ID    | location_Id | 
+|  VAR       |    VAR      |       
+|            |             | 
+
+## Table : Products
+| -----------| -----------   | ------------- | -------------- | 
+| product_ID | product_name  | product_size  |  product_price |
+|  INT       |     VAR       |   VAR         |     FLOAT      | 
+|            |               |               |                |             
+
+## Table : Transaction
+| -----------| -----------    | ---------| 
+| date_time  | transaction_ID | cafe_ID  |
+|  DATE      |     INT        |   INT    |   
+|            |                |          |
+
