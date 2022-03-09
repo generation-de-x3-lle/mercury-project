@@ -9,23 +9,7 @@
 4. Help identify trends and insights
 
 ## Table : 1
-| -----------| -----------    |
-| product_ID | transaction_ID |
-|            |                |
-
-## Table : 2
-| -----------| ----------  |
-| cafe_ID    | location_ID |
-|            |             |
-
-## Table : 3
-| -----------| ----------- | --------------- | ---------------|
-| product_ID | products_name | products_size | products_price |
-|            |               |               |                |
-|            |               |               |                |
-
-## Table : 4
-| -----------|  -----------   | ------- |
-| date_time  | transaction_ID | cafe_ID | 
-|            |                |         |                
-|            |                |         |               
+| -----------| -----------   | ------------- | -------------- | ------------ |
+| date_time  | location      | order         | amount         | payment_type |
+|            |               |               |                |              |
+|            |               |               |                |              |
