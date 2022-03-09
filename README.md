@@ -1,4 +1,8 @@
-Setup docker-compose file to create network of containers
+# Mercury group project
 
-Containers for Database management Adminer and database server PostgreSQL where deployed using docker.
-We used the docker-compose file "docker-compose.yml" the command used to start containers was docker-compose up  
+## How to use the docker compose file
+1. we used [docker-compose file](https://https://github.com/generation-de-x3-lle/mercury-project/blob/main/.devcontainer/docker-compose.yml) 
+2. To run docker command `docker-compose up`
+3. `docker-compose up` was executed in CLI to create a network of containers
+4. Container is used for Database management **adminer** 
+5. **PostgresSQL** was connected using **docker**
