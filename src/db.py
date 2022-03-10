@@ -3,7 +3,7 @@ import psycopg2
 
 def getConnection():
     connection = psycopg2.connect(
-    database="test",
+    database="final_project",
     user="root", 
     password="password", 
     host="localhost", 
@@ -11,5 +11,6 @@ def getConnection():
     )
 
     return connection
+
 
 
