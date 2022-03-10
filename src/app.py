@@ -1,5 +1,6 @@
 import csv
 from itertools import product
+from optparse import Values
 import db
 
 #<-------- Create Connection from DB.py -------->
@@ -17,7 +18,7 @@ def ExtractData(file):
 
         fullDataFromCSV = []
 
-        fieldnames=['Date/Time','Location','Full_Name','Order','Amount','Payment_Type','Card_Details']
+        fieldnames=['date_time','location','Full_Name','orders','amount','payment_type','Card_Details']
         dict_reader = csv.DictReader(file, fieldnames = fieldnames, delimiter=',')
 
         for item in dict_reader:
@@ -27,7 +28,34 @@ def ExtractData(file):
             else: break
             fullDataFromCSV.append(item)
 
-        return(fullDataFromCSV)    
+        return(fullDataFromCSV)
+
+
+fullDataFromCSV = ExtractData(file)
+
+for data_row in fullDataFromCSV:
+    data_row_insert_sql = f"""INSERT INTO chesterfield(date_time, location, orders, amount, payment_type)
+    VALUES('{data_row['date_time']}', 
+            '{data_row['location']}', 
+            '{data_row['orders']}',
+            '{data_row['amount']}', 
+            '{data_row['payment_type']}')""" 
+    values = "%s, %s, %s, %s, %s"
+    cursor.execute(data_row_insert_sql, values)
+    connection.commit()
+         
+
+
+# for data_row in fullDataFromCSV:
+#             data_row_insert_sql = f"""INSERT INTO chesterfield(date_time, Location, orders, amount, payment_type)
+#             VALUES('{data_row['date_time']}', '{data_row['Location']}', '{data_row['orders']}',
+#             {data_row['amount']}, '{data_row['payment_type']}')"""    
+#             cursor.execute(data_row_insert_sql)
+
+#             connection.commit()
+        
+#             return(fullDataFromCSV)
+
 
 
 #<-------- Create DB Fields -------->
@@ -67,6 +95,6 @@ cursor.execute(basket_table)
 connection.commit()
 
 
-#print(ExtractData(file))
+ExtractData(file)
         
 
