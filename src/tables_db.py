@@ -22,7 +22,8 @@ product_price FLOAT
 transaction_table = """
 CREATE TABLE IF NOT EXISTS transactions(
 order_id int NOT NULL,
-order_total numeric
+product_price FLOAT,
+orders_total numeric
 );
 """
 
