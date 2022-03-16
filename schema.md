@@ -22,7 +22,7 @@
 
 ## Table : Transaction
 | -----------| -----------    | ---------------| 
-|  order_ID  |   order_total  | product_price  |
-|    INT     |      INT       |       INT      |   
+|  order_ID  |  product_price |   order_total  |
+|    INT     |     FLOAT      |     NUMERIC    |   
 |            |                |                |
 
