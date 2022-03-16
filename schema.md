@@ -12,17 +12,17 @@
 |  **order_ID** |  **product_Id** | 
 |:-------------:|:---------------:|
 |     *INT*     |      *INT*      |       
-|               |                 |             
+           
 
 ## Table : Products
-| -----------| -----------   | ------------- |
-| product_ID | product_name  | product_price |
-|     INT    |     VAR       |    FLOAT      | 
-|            |               |               |            
+| **product_ID** | **product_name**  | **product_price** |
+|:--------------:|:-----------------:|:-----------------:|
+|     *INT*      |       *VAR*       |      *FLOAT*      | 
+           
 
 ## Table : Transaction
-| -----------| -----------    | ---------------| 
-|  order_ID  |  product_price |   order_total  |
-|    INT     |     FLOAT      |     NUMERIC    |   
-|            |                |                |
+|  **order_ID**  |  **product_price** |   **order_total**  |
+|:--------------:|:------------------:|:------------------:|
+|     *INT*      |      *FLOAT*       |      *NUMERIC*     |   
+
 
