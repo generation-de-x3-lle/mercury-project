@@ -10,25 +10,19 @@
 
 ## Table : Basket
 | -----------| -----------    | 
-| product_ID | transaction_Id | 
-|  INT       |    INT         |       
+|  order_ID  |   product_Id   | 
+|     INT    |      INT       |       
 |            |                |             
 
-## Table : Branch
-| -----------| ----------- | 
-| cafe_ID    | location_Id | 
-|  VAR       |    VAR      |       
-|            |             | 
-
 ## Table : Products
-| -----------| -----------   | ------------- | -------------- | 
-| product_ID | product_name  | product_size  |  product_price |
-|  INT       |     VAR       |   VAR         |     FLOAT      | 
-|            |               |               |                |             
+| -----------| -----------   | ------------- |
+| product_ID | product_name  | product_price |
+|     INT    |     VAR       |    FLOAT      | 
+|            |               |               |            
 
 ## Table : Transaction
-| -----------| -----------    | ---------| 
-| date_time  | transaction_ID | cafe_ID  |
-|  DATE      |     INT        |   INT    |   
-|            |                |          |
+| -----------| -----------    | ---------------| 
+|  order_ID  |   order_total  | product_price  |
+|    INT     |      INT       |       INT      |   
+|            |                |                |
 
