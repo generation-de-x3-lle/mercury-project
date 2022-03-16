@@ -9,10 +9,10 @@
 4. Help identify trends and insights
 
 ## Table : Basket
-| -----------| -----------    | 
-|  order_ID  |   product_Id   | 
-|     INT    |      INT       |       
-|            |                |             
+|  **order_ID** |  **product_Id** | 
+|:-------------:|:---------------:|
+|     *INT*     |      *INT*      |       
+|               |                 |             
 
 ## Table : Products
 | -----------| -----------   | ------------- |
