@@ -9,20 +9,26 @@
 4. Help identify trends and insights
 
 ## Table : Basket
-| -----------| -----------    | 
-|  order_ID  |   product_Id   | 
-|     INT    |      INT       |       
-|            |                |             
+| -----------------| ---------------| 
+|  transaction_ID  |   product_ID   | 
+|       INT        |      INT       |       
+|                  |                |             
 
 ## Table : Products
 | -----------| -----------   | ------------- |
 | product_ID | product_name  | product_price |
-|     INT    |     VAR       |    FLOAT      | 
-|            |               |               |            
+|     INT    |   VARCHAR     |    FLOAT      | 
+|            |               |               |         
+
+## Table : Branch
+| -----------| -----------------|
+| branch_ID  | branch_location  | 
+|    INT     |     VARCHAR      |    
+|            |                  |                 
 
 ## Table : Transaction
-| -----------| -----------    | ---------------| 
-|  order_ID  |  product_price |   order_total  |
-|    INT     |     FLOAT      |     NUMERIC    |   
-|            |                |                |
+| ---------------- | ------------| -----------------------| ----------------------|
+|  transaction_ID  |  date_time  |       branch_ID        |   transaction_total   |
+|        INT       |   VARCHAR   |  INT(FK to branch_ID)  |        FLOAT          |
+|                  |             |                        |                       |
 
