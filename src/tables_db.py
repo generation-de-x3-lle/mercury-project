@@ -7,7 +7,7 @@ cursor = connection.cursor()
 
 basket_table = """
 CREATE TABLE IF NOT EXISTS basket(
-order_id SERIAL,
+transaction_id SERIAL,
 product_id SERIAL   
 );
 """
@@ -21,9 +21,15 @@ product_price FLOAT
 """
 transaction_table = """
 CREATE TABLE IF NOT EXISTS transactions(
-order_id int NOT NULL,
-product_price FLOAT,
-orders_total numeric
+transaction_id int NOT NULL,
+date_time VARCHAR(100),
+branch_id int NOT NULL
+);
+"""
+branch_table = """
+CREATE TABLE IF NOT EXISTS branch(
+branch_id SERIAL,
+branch_location VARCHAR(100)
 );
 """
 
@@ -41,5 +47,6 @@ payment_type VARCHAR(100)
 cursor.execute(product_table)
 cursor.execute(transaction_table)
 cursor.execute(basket_table)
+cursor.execute(branch_table)
 cursor.execute(chesterfield_table)
 connection.commit()
