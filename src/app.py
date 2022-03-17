@@ -1,3 +1,4 @@
+from concurrent.futures import process
 import csv
 from itertools import product
 from optparse import Values
@@ -27,74 +28,81 @@ def ExtractData(file):
             if 'Full_Name' in item: del item['Full_Name']
             else: break
             fullDataFromCSV.append(item)
-
         return(fullDataFromCSV)
 
+processedData = (ExtractData(file))
 
-fullDataFromCSV = ExtractData(file)
 
-for data_row in fullDataFromCSV:
-    data_row_insert_sql = f"""INSERT INTO chesterfield(date_time, location, orders, amount, payment_type)
-    VALUES('{data_row['date_time']}', 
-            '{data_row['location']}', 
-            '{data_row['orders']}',
-            '{data_row['amount']}', 
-            '{data_row['payment_type']}')""" 
-    values = "%s, %s, %s, %s, %s"
-    cursor.execute(data_row_insert_sql, values)
+def cleaning(processedData):
+    finalProducts = [] #global list which will contain all transactions
+
+    for singleItem in processedData:
+        allOrders = (singleItem['orders']) #only getting the orders from the file
+        individualorder = allOrders.split(",") #splitting each instance
+    
+        for row in individualorder:
+            row = row.rsplit("-",1) #splitting via the dash only once
+            productName = row[0]  # get the name(first item)
+            productPrice = row[1] # get the price (second item)
+            productPrice = productPrice.replace(" ","") #removing the space/s
+            alteredProducts = {'product_name': productName,'product_price':productPrice} #creating a dict with new values
+        
+            finalProducts.append(alteredProducts) #appending Trans list to the global list
+
+    return(finalProducts)
+
+
+writingData = (cleaning(processedData))
+
+
+for item in writingData:
+    data_row_insert_sql = f"""INSERT INTO chesterfield(product_name, product_price)
+    VALUES('{item['product_name']}', '{item['product_price']}')"""    
+    cursor.execute(data_row_insert_sql)
+
     connection.commit()
-         
-
-
-# for data_row in fullDataFromCSV:
-#             data_row_insert_sql = f"""INSERT INTO chesterfield(date_time, Location, orders, amount, payment_type)
-#             VALUES('{data_row['date_time']}', '{data_row['Location']}', '{data_row['orders']}',
-#             {data_row['amount']}, '{data_row['payment_type']}')"""    
-#             cursor.execute(data_row_insert_sql)
-
-#             connection.commit()
         
-#             return(fullDataFromCSV)
+ 
 
 
 
-#<-------- Create DB Fields -------->
+# #<-------- Create DB Fields -------->
 
-basket_table = """
-CREATE TABLE IF NOT EXISTS basket(
-product_id int NOT NULL,
-transaction_id int NOT NULL
-);
-"""
-branch_table = """
-CREATE TABLE IF NOT EXISTS branch(
-cafe_id int NOT NULL,
-location VARCHAR(100)
-);
-"""
-product_table = """
-CREATE TABLE IF NOT EXISTS products(
-product_id int NOT NULL,
-product_name VARCHAR(100),
-product_size VARCHAR(100),
-product_price FLOAT
-);
-"""
-transaction_table = """
-CREATE TABLE IF NOT EXISTS transactions (
-date_time DATE,
-transaction_id int NOT NULL,
-cafe_id int NOT NULL
-);
-"""
+# basket_table = """
+# CREATE TABLE IF NOT EXISTS basket(
+# product_id int NOT NULL,
+# transaction_id int NOT NULL
+# );
+# """
+# branch_table = """
+# CREATE TABLE IF NOT EXISTS branch(
+# cafe_id int NOT NULL,
+# location VARCHAR(100)
+# );
+# """
+# product_table = """
+# CREATE TABLE IF NOT EXISTS products(
+# product_id int NOT NULL,
+# product_name VARCHAR(100),
+# product_size VARCHAR(100),
+# product_price FLOAT
+# );
+# """
+# transaction_table = """
+# CREATE TABLE IF NOT EXISTS transactions (
+# date_time DATE,
+# transaction_id int NOT NULL,
+# cafe_id int NOT NULL
+# );
+# """
 
-cursor.execute(product_table)
-cursor.execute(transaction_table)
-cursor.execute(branch_table)
-cursor.execute(basket_table)
-connection.commit()
+# cursor.execute(product_table)
+# cursor.execute(transaction_table)
+# cursor.execute(branch_table)
+# cursor.execute(basket_table)
+# connection.commit()
 
 
-ExtractData(file)
-        
+#ExtractData(file)
+cleaning(processedData) 
 
