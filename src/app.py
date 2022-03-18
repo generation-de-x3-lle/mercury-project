@@ -33,6 +33,17 @@ def ExtractData(file):
 processedData = (ExtractData(file))
 
 
+cursor.execute('SELECT branch_id FROM branch')
+for a in cursor:
+    print(a[0])
+    branch_id = a[0]
+
+for item in processedData:
+    data_row_insert_sql = f"""INSERT INTO transactions(date_time, branch_id)
+    VALUES(to_timestamp('{item['date_time']}','DD/MM/YYYY HH24:MI'),{branch_id})"""    
+    cursor.execute(data_row_insert_sql)
+    connection.commit()
+
 def cleaning(processedData):
     finalProducts = [] #global list which will contain all transactions
 
@@ -43,6 +54,7 @@ def cleaning(processedData):
         for row in individualorder:
             row = row.rsplit("-",1) #splitting via the dash only once
             productName = row[0]  # get the name(first item)
+            productName = productName.strip()
             productPrice = row[1] # get the price (second item)
             productPrice = productPrice.replace(" ","") #removing the space/s
             alteredProducts = {'product_name': productName,'product_price':productPrice} #creating a dict with new values
@@ -51,18 +63,35 @@ def cleaning(processedData):
 
     return(finalProducts)
 
+writingData = (processedData)
+# for item in writingData:
+#     data_row_insert_sql = f"""INSERT INTO products(product_name, product_price)
+#     VALUES('{item}['product_name']'), ('{item}['product_price']')"""    
+#     cursor.execute(data_row_insert_sql)
+#     connection.commit()
 
-writingData = (cleaning(processedData))
+
+def branch_location(processedData):
+    branch_location_list = []
+    branch_location_list_unique = []
+    for item in processedData:
+        branch_location = item['location']
+        branch_location_list.append(branch_location)
+        branch_location_list_unique = set(branch_location_list)
+    return branch_location_list_unique
 
 
-for item in writingData:
-    data_row_insert_sql = f"""INSERT INTO chesterfield(product_name, product_price)
-    VALUES('{item['product_name']}', '{item['product_price']}')"""    
-    cursor.execute(data_row_insert_sql)
+# writingData = (branch_location(processedData))
+# for item in writingData:
+#     data_row_insert_sql = f"""INSERT INTO branch(branch_location)
+#     VALUES('{item}')"""    
+#     cursor.execute(data_row_insert_sql)
+#     connection.commit()
 
-    connection.commit()
+
+
         
- 
+
 
 
 
