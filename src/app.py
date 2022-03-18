@@ -32,6 +32,18 @@ def ExtractData(file):
 
 processedData = (ExtractData(file))
 
+cursor.execute('SELECT branch_id FROM branch')
+for a in cursor:
+    print(a[0])
+    branch_id = a[0]
+
+for item in processedData:
+    data_row_insert_sql = f"""INSERT INTO transactions(date_time, branch_id)
+    VALUES(to_timestamp('{item['date_time']}','DD/MM/YYYY HH24:MI'),{branch_id})"""    
+    cursor.execute(data_row_insert_sql)
+    connection.commit()
+
+
 
 cursor.execute('SELECT branch_id FROM branch')
 for a in cursor:
@@ -63,12 +75,18 @@ def cleaning(processedData):
 
     return(finalProducts)
 
+<<<<<<< HEAD
+=======
+
+writingData = (cleaning(processedData))
+>>>>>>> 99124bb96f0595a45c4f2ce45b6706d662efee68
 writingData = (processedData)
 # for item in writingData:
 #     data_row_insert_sql = f"""INSERT INTO products(product_name, product_price)
 #     VALUES('{item}['product_name']'), ('{item}['product_price']')"""    
 #     cursor.execute(data_row_insert_sql)
 #     connection.commit()
+<<<<<<< HEAD
 
 
 def branch_location(processedData):
@@ -87,51 +105,31 @@ def branch_location(processedData):
 #     VALUES('{item}')"""    
 #     cursor.execute(data_row_insert_sql)
 #     connection.commit()
+=======
+>>>>>>> 99124bb96f0595a45c4f2ce45b6706d662efee68
 
+def branch_location(processedData):
+    branch_location_list = []
+    branch_location_list_unique = []
+    for item in processedData:
+        branch_location = item['location']
+        branch_location_list.append(branch_location)
+        branch_location_list_unique = set(branch_location_list)
+    return branch_location_list_unique
+
+# writingData = (branch_location(processedData))
+# for item in writingData:
+#     data_row_insert_sql = f"""INSERT INTO branch(branch_location)
+#     VALUES('{item}')"""    
+#     cursor.execute(data_row_insert_sql)
+#     connection.commit()
 
 
         
+<<<<<<< HEAD
 
+=======
+>>>>>>> 99124bb96f0595a45c4f2ce45b6706d662efee68
 
-
-
-# #<-------- Create DB Fields -------->
-
-# basket_table = """
-# CREATE TABLE IF NOT EXISTS basket(
-# product_id int NOT NULL,
-# transaction_id int NOT NULL
-# );
-# """
-# branch_table = """
-# CREATE TABLE IF NOT EXISTS branch(
-# cafe_id int NOT NULL,
-# location VARCHAR(100)
-# );
-# """
-# product_table = """
-# CREATE TABLE IF NOT EXISTS products(
-# product_id int NOT NULL,
-# product_name VARCHAR(100),
-# product_size VARCHAR(100),
-# product_price FLOAT
-# );
-# """
-# transaction_table = """
-# CREATE TABLE IF NOT EXISTS transactions (
-# date_time DATE,
-# transaction_id int NOT NULL,
-# cafe_id int NOT NULL
-# );
-# """
-
-# cursor.execute(product_table)
-# cursor.execute(transaction_table)
-# cursor.execute(branch_table)
-# cursor.execute(basket_table)
-# connection.commit()
-
-
-#ExtractData(file)
 cleaning(processedData) 
 
