@@ -21,8 +21,8 @@ product_price FLOAT
 """
 transaction_table = """
 CREATE TABLE IF NOT EXISTS transactions(
-transaction_id int NOT NULL,
-date_time VARCHAR(100),
+transaction_id SERIAL,
+date_time TIMESTAMP,
 branch_id int NOT NULL
 );
 """
