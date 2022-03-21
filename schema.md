@@ -27,7 +27,7 @@
 |            |                  |                 
 
 ## Table : Transaction
-| ---------------- | ------------| -----------------------| ----------------------|
-|  transaction_ID  |  date_time  |       branch_ID        |   transaction_total   |
-|        INT       |   VARCHAR   |  INT(FK to branch_ID)  |        FLOAT          |
-|                  |             |                        |                       |
+| ---------------- | ------------| -----------------------|
+|  transaction_ID  |  date_time  |       branch_ID        |
+|        INT       |   VARCHAR   |  INT(FK to branch_ID)  |
+|                  |             |                        |
