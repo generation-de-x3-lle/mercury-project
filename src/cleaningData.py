@@ -16,8 +16,9 @@ file = '../chesterfield1.csv'
 #<-------- Extract Data form the CSV and appending it to list -------->
 
 def ExtractData(file):
+    fullDataFromCSV = []
     with open(file, 'r') as file:
-        fullDataFromCSV = []
+        
         fieldnames=['date_time','location','Full_Name','orders','amount','payment_type','Card_Details']
         dict_reader = csv.DictReader(file, fieldnames = fieldnames, delimiter=',')
 
@@ -28,11 +29,11 @@ def ExtractData(file):
             if 'payment_type' in item: del item['payment_type']
             else: break
             fullDataFromCSV.append(item)
-        return(fullDataFromCSV[0])
+    return fullDataFromCSV
 
 #<-------- Accesscing the list and splitting each item-------->
 
-processedData = (ExtractData(file))
+processedData = ExtractData(file)
 
 def splittingData(processedData):
     finalProducts = []
@@ -56,26 +57,27 @@ def splittingData(processedData):
 
 #<-------- Removing duplicates (comment out if not needed!)-------->
 
-def removeDuplicates(removeDuplicates):
-    newItems = []
-    for item in removeDuplicates:
-        if item not in newItems:
-            newItems.append(item)
-    return newItems
+# def removeDuplicates(removeDuplicates):
+#     newItems = []
+#     for item in removeDuplicates:
+#         if item not in newItems:
+#             newItems.append(item)
+#     return newItems
 
 #<-------- Getting individual branch location-------->
 
-def branchLocation(processedData):
-    currentBranchList = []
-    updatedBranchLocation = []
-    for item in processedData:
-        branch_location = item['location']
-        currentBranchList.append(branch_location)
-        updatedBranchLocation = set(currentBranchList)
-    return updatedBranchLocation
 
-#print(branchLocation(processedData))
+location = ExtractData(file)
 
-print(ExtractData(file))
+def branchLocation(location):
+    currentList = []
+    newBranchList = []
+    for item in location:
+        branch = (item['location'])
+        currentList.append(branch)
+        newBranchList = set(currentList)
+    return(newBranchList)
 
-#print(splittingData(processedData))
+
+
+#branchLocation(location)
