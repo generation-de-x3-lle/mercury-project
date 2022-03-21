@@ -17,6 +17,9 @@ from cleaningData import *
 connection = db.getConnection()
 cursor = connection.cursor()
 
+###################################################################################
+
+
 #<-------- Insert into DB functions -------->
 
 # We're getting the data from the extract function and from the database
@@ -52,44 +55,33 @@ def insertIntoBranch(location):
             connection.commit()
 
 
+###################################################################################
 
-insertIntoBranch(location)
-
-
-    # currentBranchList = []
-    # updatedBranchLocation = []
-    # for item in processedData:
-    #     branch_location = item['location']
-    #     currentBranchList.append(branch_location)
-    #     updatedBranchLocation = set(currentBranchList)
-    # return updatedBranchLocation
+# Getting the data from Extract function
+# Getting the ID's from the branch table in DB if there are any
+# Getting the timestamp via indexing and writing the branch id to the respective time
 
 
+data = ExtractData(file)
+
+def insertIntoTransaction(data):
+    with cursor:
+        cursor.execute('SELECT branch_id FROM branch')
+
+        for id in cursor:
+            branch_id = id[0] 
+            #print(branch_id) #<------------ prints "1" (Chesterfield) since there is only one in db
+
+        for item in processedData:
+            sql = f"""INSERT INTO transactions(date_time, branch_id)
+            VALUES (to_timestamp('{item['date_time']}','DD/MM/YYYY HH24:MI'),{branch_id})
+            """    
+            
+            cursor.execute(sql)
+            connection.commit()
 
 
-# cursor.execute('SELECT branch_id FROM branch')
-# for a in cursor:
-#     print(a[0])
-#     branch_id = a[0]
 
-# for item in processedData:
-#     data_row_insert_sql = f"""INSERT INTO transactions(date_time, branch_id)
-#     VALUES(to_timestamp('{item['date_time']}','DD/MM/YYYY HH24:MI'),{branch_id})"""    
-#     cursor.execute(data_row_insert_sql)
-#     connection.commit()
-
-
-
-# cursor.execute('SELECT branch_id FROM branch')
-# for a in cursor:
-#     print(a[0])
-#     branch_id = a[0]
-
-# for item in processedData:
-#     data_row_insert_sql = f"""INSERT INTO transactions(date_time, branch_id)
-#     VALUES(to_timestamp('{item['date_time']}','DD/MM/YYYY HH24:MI'),{branch_id})"""    
-#     cursor.execute(data_row_insert_sql)
-#     connection.commit()
 
 
 #<-------- removing duplicates. (comment out if not needed atm!) -------->
