@@ -21,7 +21,7 @@ product_id SERIAL
 
 product_table = """
 CREATE TABLE IF NOT EXISTS products(
-product_id int NOT NULL,
+product_id SERIAL,
 product_name VARCHAR(100),
 
 product_price FLOAT
