@@ -20,7 +20,6 @@ product_price FLOAT
 transaction_table = '''CREATE TABLE IF NOT EXISTS transaction(
 transaction_id SERIAL PRIMARY KEY,
 date_time TIMESTAMP,
-transaction_total FLOAT NOT NULL,
 branch_id INT,
 CONSTRAINT fk_branch FOREIGN KEY(branch_id) REFERENCES branch(branch_id)
 );
