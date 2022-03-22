@@ -11,7 +11,7 @@ import db
 #                                                               #
 #################################################################
 
-file = '../chesterfield1.csv'
+file = '../chesterfield2.csv'
 
 #<-------- Extract Data form the CSV and appending it to list -------->
 
@@ -36,13 +36,14 @@ def ExtractData(file):
 processedData = ExtractData(file)
 
 def splittingData(processedData):
+    products =[]
     finalProducts = []
 
     for singleItem in processedData:
         #row
         allOrders = (singleItem['orders'])
         individualorder = allOrders.split(",")
-    
+
         #indivdual item
         for row in individualorder:
             row = row.rsplit("-",1)
@@ -51,21 +52,27 @@ def splittingData(processedData):
             productPrice = row[1]
             productPrice = productPrice.replace(" ","")
             alteredProducts = {'product_name': productName,'product_price':productPrice}
-            finalProducts.append(alteredProducts)
-    
-        return(finalProducts)
+            products.append(alteredProducts)
 
-#<-------- Removing duplicates (comment out if not needed!)-------->
+ #if its in final products dont add it
 
-# def removeDuplicates(removeDuplicates):
-#     newItems = []
-#     for item in removeDuplicates:
-#         if item not in newItems:
-#             newItems.append(item)
-#     return newItems
+# The strategy is to convert the list of dictionaries to a list of tuples where the tuples contain the
+# items of the dictionary. Since the tuples can be hashed, you can remove duplicates using set
+# (using a set comprehension here, older python alternative would be set(tuple(d.items()) for d 
+# in l)) and, after that, re-create the dictionaries from tuples with dict.
+# processedData = ExtractData(file)
+# Source: stackoverflow
+
+        seen = set()        
+        for item in products:
+            t = tuple(sorted(item.items()))
+            if t not in seen:
+                seen.add(t)
+                finalProducts.append(item)
+        return finalProducts
+
 
 #<-------- Getting individual branch location-------->
-
 
 location = ExtractData(file)
 
@@ -79,5 +86,8 @@ def branchLocation(location):
     return(newBranchList)
 
 
-
+#print(len(splittingData(processedData))) #<-----779 items
 #branchLocation(location)
+#print(removeDuplicates(processedData))
+#print(splittingData(processedData))
+#print(splittingData(processedData))
