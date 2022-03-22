@@ -73,7 +73,7 @@ def insertIntoTransaction(data):
             #print(branch_id) #<------------ prints "1" (Chesterfield) since there is only one in db
 
         for item in processedData:
-            sql = f"""INSERT INTO transactions(date_time, branch_id)
+            sql = f"""INSERT INTO transaction(date_time, branch_id)
             VALUES (to_timestamp('{item['date_time']}','DD/MM/YYYY HH24:MI'),{branch_id})
             """    
             cursor.execute(sql)
@@ -89,7 +89,7 @@ def insertIntoProducts(data):
     notDuplicatedProducts= []
 
     with cursor:
-        cursor.execute('SELECT * FROM products')
+        cursor.execute('SELECT * FROM product')
         productsInDB = cursor.fetchall()
         #print(productsInDB) #<---- [(70, 'Regular Flavoured iced latte - Hazelnut', 2.75), (71, 'Large Latte', 2.45), (72, 'Large Latte', 2.45)]
             
@@ -104,16 +104,13 @@ def insertIntoProducts(data):
                 notDuplicatedProducts.append(product)
         
         for item in notDuplicatedProducts:
-            sql = f"""INSERT INTO products(product_name, product_price)
+            sql = f"""INSERT INTO product(product_name, product_price)
             VALUES ('{item['product_name']}','{item['product_price']}')"""
             cursor.execute(sql)
             connection.commit()
 
-
-
-
 #insertIntoProducts(data)
-#print(splittingData(data))#
+#print(splittingData(data))
 
 #insertIntoBranch(location)
 #insertIntoTransaction(data)
