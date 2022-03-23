@@ -28,21 +28,17 @@ cursor = connection.cursor()
 # If it doesn't exist then we append the location to the newBranch list.
 # Finally we commit to the DB.
 
-
-
 def insertIntoBranch(location):
-    
-    with cursor:
-        cursor.execute('SELECT branch_id FROM branch WHERE branch_location = %s', location)
-        branch_id = cursor.fetchone()
+    cursor.execute('SELECT branch_id FROM branch WHERE branch_location = %s', [location])
+    branch_id = cursor.fetchone()
 
-        if not branch_id:
-            sql = f"""INSERT INTO branch("branch_location")VALUES('{location}')"""  
-            cursor.execute(sql)
-            cursor.execute('SELECT branch_id FROM branch WHERE branch_location = %s', location)
-            branch_id = cursor.fetchone()
+    if not branch_id:
+        sql = f"""INSERT INTO branch("branch_location")VALUES('{location}')"""  
+        cursor.execute(sql)
+        cursor.execute('SELECT branch_id FROM branch WHERE branch_location = %s', [location])
+        branch_id = cursor.fetchone()
         connection.commit()
-        return branch_id[0]
+    return branch_id[0]
 
 ###################################################################################
 
@@ -51,52 +47,52 @@ def insertIntoBranch(location):
 # Getting the timestamp via indexing and writing the branch id to the respective time
 
 
-
 def insertIntoTransaction(branch_id, transaction_data):
-    with cursor:
-
-        sql = f"""INSERT INTO transaction(date_time, branch_id)
-        VALUES (to_timestamp('{transaction_data['date_time']}','DD/MM/YYYY HH24:MI'),{branch_id})
-        """    
-        cursor.execute(sql)
-        connection.commit()
-
-###################################################################################
-
-
+    sql = f"""INSERT INTO transaction(date_time, branch_id)
+    VALUES (to_timestamp('{transaction_data['date_time']}','DD/MM/YYYY HH24:MI'),{branch_id})
+    """    
+    cursor.execute(sql)
+    connection.commit()
+    
+    sql = f"""SELECT transaction_id from transaction WHERE date_time=to_timestamp('{transaction_data['date_time']}','DD/MM/YYYY HH24:MI') AND
+    branch_id = {branch_id}"""  
+    cursor.execute(sql)
+    transaction_id = cursor.fetchone()
+    return transaction_id[0]
+    
+##########################################################################################
 
 def insertIntoProducts(product):
     product_name = product['product_name']
     product_price = product['product_price']
-    with cursor:
+    
+    cursor.execute('SELECT product_id FROM product WHERE product_name = %s AND product_price = %s',(product_name, product_price))
+    products_id = cursor.fetchone()
+
+    if not products_id:
+        sql = f"""INSERT INTO product(product_name, product_price)
+        VALUES ('{product_name}','{product_price}')"""
+        cursor.execute(sql)
         cursor.execute('SELECT product_id FROM product WHERE product_name = %s AND product_price = %s', (product_name, product_price))
         products_id = cursor.fetchone()
-        
-        if not products_id:
-            sql = f"""INSERT INTO product(product_name, product_price)
-            VALUES ('{product_name}','{product_price}')"""
-            cursor.execute(sql)
-            cursor.execute('SELECT product_id FROM product WHERE product_name = %s AND product_price = %s', (product_name, product_price))
-            products_id = cursor.fetchone()
-            connection.commit()
-        return products_id[0]
+        connection.commit()
+    return products_id[0]
 
-
+##########################################################################################
 
 def insert_into_basket_table(product_id, transaction_id):
-    with cursor:
-
-        sql_basket = f"""INSERT INTO basket(product_id, transaction_id)
-        VALUES ('{product_id}', '{transaction_id}')"""   
-        cursor.execute(sql_basket)
-        connection.commit()
+    sql_basket = f"""INSERT INTO basket(product_id, transaction_id)
+    VALUES ('{product_id}', '{transaction_id}')"""   
+    cursor.execute(sql_basket)
+    connection.commit()
         
+##########################################################################################
+
 processedData = ExtractData(file)
-#data = splittingData(processedData)
-#location = branchLocation(location)
 
 for row in processedData:
-    branch_id = insertIntoBranch(row['branch'])
+    #print(row)
+    branch_id = insertIntoBranch(row['location'])
     transaction_id = insertIntoTransaction(branch_id, row)
     basket = row['orders']
     individualorders = basket.split(",")
@@ -111,8 +107,8 @@ for row in processedData:
         insert_into_basket_table(product_id, transaction_id)
         
 
-#insertIntoProducts(data)
-#print(splittingData(data))
-#insertIntoBranch(location)
-#insertIntoTransaction(data)
-#insertIntoProducts(data)
+
+"""
+SELECT * from product JOIN basket ON product.product_id = basket.product_id
+JOIN transaction ON basket.transaction_id = transaction.transaction_id  #orders on a transaction
+"""
