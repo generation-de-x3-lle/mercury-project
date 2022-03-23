@@ -11,7 +11,7 @@ import db
 #                                                               #
 #################################################################
 
-file = '../chesterfield2.csv'
+file = '../chesterfield1.csv'
 
 #<-------- Extract Data form the CSV and appending it to list -------->
 
@@ -84,10 +84,3 @@ def branchLocation(location):
         currentList.append(branch)
         newBranchList = set(currentList)
     return(newBranchList)
-
-
-#print(len(splittingData(processedData))) #<-----779 items
-#branchLocation(location)
-#print(removeDuplicates(processedData))
-#print(splittingData(processedData))
-#print(splittingData(processedData))

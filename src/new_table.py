@@ -39,3 +39,13 @@ cursor.execute(product_table)
 cursor.execute(transaction_table)
 cursor.execute(basket_table)
 connection.commit()
+
+
+
+############## DROP ALL TABLES (COMMENT OUT IF NOT NEEDED) ##########################
+
+# sql = "DROP TABLE basket, branch, product, transaction"
+# cursor.execute(sql)
+# connection.commit()
+
+#####################################################################################
