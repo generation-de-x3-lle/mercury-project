@@ -17,3 +17,29 @@ def lambda_handler(event, context):
     
     for line in reader:
         print(line)
+
+################################## < creating a test tabel in Lambda > #############################################
+
+connection = getConnection()
+    cursor = connection.cursor()
+
+    result = cursor.execute("""
+        CREATE TABLE IF NOT EXISTS mercury.roshnis_test_table(
+        branch_id INT IDENTITY(1,1) PRIMARY KEY,
+        branch_location VARCHAR(100) NOT NULL)
+    """)
+    
+    data = cursor.execute("""
+        INSERT INTO mercury.roshnis_test_table(product_id, product_location) VALUES (100, 'leeds')
+    """)
+    connection.commit()
+    cursor.close()
+    connection.close()
+    
+    result = ("""
+        select * from mercury.roshnis_test_table
+    """)
+    
+    items = cursor.execute(result)
+    items = cursor.fetchall()
+    for item in items:
