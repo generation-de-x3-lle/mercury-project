@@ -89,22 +89,23 @@ def insert_into_basket_table(product_id, transaction_id):
 ##########################################################################################
 
 processedData = ExtractData(file)
+def writeToDB(processedData):
 
-for row in processedData:
-    #print(row)
-    branch_id = insertIntoBranch(row['location'])
-    transaction_id = insertIntoTransaction(branch_id, row)
-    basket = row['orders']
-    individualorders = basket.split(",")
-    for order in individualorders:
-        order = order.rsplit("-",1)
-        productName = order[0]
-        productName = productName.strip()
-        productPrice = order[1]
-        productPrice = productPrice.replace(" ","")
-        alteredProducts = {'product_name': productName,'product_price':productPrice}
-        product_id = insertIntoProducts(alteredProducts)
-        insert_into_basket_table(product_id, transaction_id)
+    for row in processedData:
+        #print(row)
+        branch_id = insertIntoBranch(row['location'])
+        transaction_id = insertIntoTransaction(branch_id, row)
+        basket = row['orders']
+        individualorders = basket.split(",")
+        for order in individualorders:
+            order = order.rsplit("-",1)
+            productName = order[0]
+            productName = productName.strip()
+            productPrice = order[1]
+            productPrice = productPrice.replace(" ","")
+            alteredProducts = {'product_name': productName,'product_price':productPrice}
+            product_id = insertIntoProducts(alteredProducts)
+            insert_into_basket_table(product_id, transaction_id)
         
 
 
