@@ -1,0 +1,78 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: >
+  Template to deploy a lambda .
+
+Resources:
+  LambdaFunctionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - lambda.amazonaws.com
+          Action:
+            - sts:AssumeRole
+      Path: "/"
+      PermissionsBoundary: !Sub arn:aws:iam::${AWS::AccountId}:policy/ScopePermissions
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+      Policies:
+      - PolicyName: LambdaLogsPolicy
+        PolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+          - Effect: Allow
+            Action:
+              - logs:CreateLogGroup
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Resource: '*'
+
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: de-x3-lle-mercury-lambda
+      Timeout: 300
+      Runtime: python3.8
+      Handler: lambda_function.lambda_handler
+      Role: arn:aws:iam::980326165877:role/mercury_lambda_role
+      Code:
+        S3Bucket: de-x3-lle-mercury
+        S3Key: templates/lambda.zip
+      Layers:
+        - arn:aws:lambda:eu-west-1:980326165877:layer:psycopg2:3
+      VpcConfig:
+        SecurityGroupIds:
+          - sg-0ee6957d4a38a14a2 
+        SubnetIds:
+          - subnet-0b92120ab1d639d21
+          - subnet-03620ce531b1760af
+  ScheduledRule:
+    Type: AWS::Events::Rule
+    DependsOn: LambdaFunction
+    Properties:
+      Name: mercury-csv-rule
+      Description: "ScheduledRule"
+      ScheduleExpression: "cron(0 20 * * ? *)"
+      State: "ENABLED"
+      Targets:
+        -
+          Arn:
+            Fn::GetAtt:
+              - "LambdaFunction"
+              - "Arn"
+          Id: "TargetFunctionV1"
+  PermissionForEventsToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    DependsOn: LambdaFunction
+    Properties:
+      FunctionName: !Ref "LambdaFunction"
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazonaws.com"
+      SourceArn:
+        Fn::GetAtt:
+          - "ScheduledRule"
+          - "Arn"
